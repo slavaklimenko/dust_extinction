@@ -553,10 +553,13 @@ if 1:
         return ln
 
     # define prior function for paramters
-    def log_prior(theta):
+    def log_prior(theta, MW_prior=True):
         (f0,c1, c2, c3, x0, gamma) = theta
         if (0<f0 and -4 < c1 <10  and -1 < c2 <10 and 0 < c3 <10 and 4.4 < x0 < 4.8 and 0.5< gamma<2.7):
-            return 0.0
+            if MW_prior:
+                return -10*( ((gamma-1)/0.1)**2 +  ((x0-4.6)/0.1)**2)
+            else:
+                return 0.0
         return -np.inf
 
 
@@ -579,7 +582,7 @@ if 1:
         par_names = ['f0', 'c1', 'c2', 'c3', 'x0', 'gamma']
 
     # set initial values and run mcmc and save calcualtion to mcmc.pkl
-    if 0:
+    if 1:
         f0 = 1
         c1 = 0.5
         c2 = 0.2
@@ -716,7 +719,10 @@ if 1:
             c.plotter.plot(filename="example.png", figsize="column")
             res = c.analysis.get_summary(parameters=par_names)
             for p in par_names:
-                print(p, res[p][1],res[p][2]-res[p][1],res[p][1]-res[p][0])
+                if 'None' in res[p][2]:
+                    print(p)
+                else:
+                    print(p, res[p][1],res[p][2]-res[p][1],res[p][1]-res[p][0])
 
         if 0:
             theta_for_plot = []

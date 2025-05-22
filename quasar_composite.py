@@ -10,9 +10,6 @@ from pathlib import Path
 from scipy import interpolate
 import sys
 
-from ydata_profiling.report.structure.variables import render_real
-
-#from MaNGA.sdss_image import f_name
 
 sys.path.append('/home/slava/science/codes/python/spectro/')
 sys.path.append('/home/slava/science/codes/python/dust_extinction_model/')
@@ -38,18 +35,12 @@ import csv
 from scipy.signal import savgol_filter
 from spectrum_model import * #spectrum, rebin_arr,rebin_weight_mean
 
-path_to_qso_normalized_spectra = '/home/slava/science/research/kulkarni/JWST-DLAs/ID2155/results/normalized_spectra/'
-path_to_dust_templates_labs = '/home/slava/science/research/kulkarni/JWST-DLAs/ID2155/results/figures/fig-fit-profiles/dust_templates/Templates/profiles/Lab-Templates/'
-path_to_dust_templates_astro = '/home/slava/science/research/kulkarni/JWST-DLAs/ID2155/results/figures/fig-fit-profiles/dust_templates/Templates/profiles/Obs-Template/'
 
-path_to_sdss_spectrum = '/home/slava/science/research/kulkarni/JWST-DLAs/ID2155/sdss/spec-10453-58136-0558-j1007.fits'
-path_to_jwst_spectrum = '/home/slava/science/research/kulkarni/JWST-DLAs/ID2155/results/J1007/J1007_scailing_2s-rebinned24.fits'
-path_to_composite_spectra = '/home/slava/science/article/absorption_spectra/Composite_spectra/'
-path_to_mir_spectra = '/home/slava/science/codes/python/dust_extinction_model/'
+path_to_composite_spectra = './composite/'
 
 
 
-qso_composite_vanderberk = path_to_composite_spectra + 'Vanderberk/sdss.txt'
+qso_composite_vanderberk = path_to_composite_spectra + 'VandenBerk.txt'
 uv_qso_composite = np.loadtxt(qso_composite_vanderberk)
 col1 = uv_qso_composite[:, 0]
 col2 = uv_qso_composite[:, 1]
@@ -57,7 +48,7 @@ col2 = uv_qso_composite[:, 1]
 s_uv_qso = spectrum(x=col1,y=col2*col1**2*1e-7)
 s_uv_qso.interp = interp1d(s_uv_qso.x, s_uv_qso.y,fill_value='extrapolate')
 
-qso_composite_glikman = path_to_composite_spectra + 'Glikman/J_ApJ_640_579/table7.dat'
+qso_composite_glikman = path_to_composite_spectra + 'Glikman.dat'
 nir_qso_composite = np.loadtxt(qso_composite_glikman)
 col1 = nir_qso_composite[:, 0]
 col2 = nir_qso_composite[:, 1]
@@ -68,7 +59,7 @@ s_nir_qso = spectrum(x=col1,y=col2*col1**2*1e-7)
 
 
 
-qso_composite_selsing_path = path_to_composite_spectra + 'Selsing/spectrum.dat'
+qso_composite_selsing_path = path_to_composite_spectra + 'Selsing.dat'
 f = np.loadtxt(qso_composite_selsing_path)
 col1 = f[:, 0]
 col2 = f[:, 1]
@@ -81,7 +72,7 @@ s_selsing_qso.ynu = np.array(col2[~mask_absorption])
 #s_selsing_qso.y *= fnorm
 
 
-qso_composite_jiang = path_to_composite_spectra + 'Jiang/Jiang2011.dat'
+qso_composite_jiang = path_to_composite_spectra + 'Jiang2011.dat'
 jiang_qso_composite = np.loadtxt(qso_composite_jiang)
 col1 = jiang_qso_composite[:, 0]
 col2 = jiang_qso_composite[:, 1]
@@ -112,14 +103,14 @@ s_nir_qso.interp = interp1d(s_nir_qso.x, s_nir_qso.y, fill_value='extrapolate')
 
 
 #MIR models
-mir_hatzi_qso_composite = np.loadtxt(path_to_mir_spectra+'/data/MIR/J_AJ_129_1198/table2.dat')
+mir_hatzi_qso_composite = np.loadtxt('./data/MIR/J_AJ_129_1198/table2.dat')
 #noramlized at 0.3 micron
 col1 = mir_hatzi_qso_composite[:, 0]
 col2 = mir_hatzi_qso_composite[:, 1]
 s_hatzi_qso = spectrum(x=np.array(col1),y=np.array(col2*col1**2))
 s_hatzi_qso.interp = interp1d(s_hatzi_qso.x, s_hatzi_qso.y,fill_value='extrapolate')
 
-mir_hernan_qso_composite = np.loadtxt(path_to_mir_spectra+'/data/MIR/Hernan-Caballero-16/table1.dat',skiprows=17)
+mir_hernan_qso_composite = np.loadtxt('./data/MIR/Hernan-Caballero-16/table1.dat',skiprows=17)
 col1 = mir_hernan_qso_composite[:, 0]
 col2 = mir_hernan_qso_composite[:, 1]
 s_hernan_qso = spectrum(x=np.array(col1)*1e4,y=np.array(col2))
@@ -127,11 +118,6 @@ s_hernan_qso.interp = interp1d(s_hernan_qso.x, s_hernan_qso.y,fill_value='extrap
 
 
 
-plt.subplots()
-plt.plot(col1,col2,ls='-')
-plt.xscale('log')
-plt.yscale('log')
-plt.show()
 
 #fnorm = np.mean(s_selsing_qso.y[np.abs(s_selsing_qso.x - 11000)<200]) / np.mean(s_nir_qso.y[np.abs(s_nir_qso.x - 11000)<200])
 #s_nir_qso.y *= fnorm

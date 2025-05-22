@@ -45,12 +45,12 @@ if 1:
 
 #set target data
 if 1:
-    q_name = 'J0901'
+    q_name = 'J0745'
     Q = QSO_list[q_name]
 
 
     # set normalization point for continuum
-    w_norm = 0.7481
+    w_norm = Q.photo_data['SDSSz'].l
     w_norm_disp = 0.1
     f_units = 'F_lam'
 
@@ -67,7 +67,7 @@ if 1:
             el.f *= np.exp(+Q.AvMW * extinction_gordon23(l=np.array(el.l), Rv=3.1) / 1.086)
 
     # derive function for calculation the integrated flux within the band
-    def calc_band_flux(f=Q.photo_data['i(sdss)'], redenned_model=interp1d([1,2],[1,2])):
+    def calc_band_flux(f=Q.photo_data['SDSSz'], redenned_model=interp1d([1,2],[1,2])):
         xx = np.linspace(f.lmin, f.lmax, 100)
         band_flux = np.trapz(redenned_model(xx / (1 + Q.z_abs)), xx) / (f.lmax - f.lmin)
         return band_flux
@@ -117,8 +117,11 @@ if 1:
 
 
         # correct spectral data for the offset with sdss photometry in i filter
-        Q.sp_sdss.y *= Q.photo_data['i(sdss)'].f / np.mean(Q.sp_sdss.y[np.abs(Q.sp_sdss.x - 7481 / 1e4) < 300 / 1e4])
-        Q.sp_sdss.err *= Q.photo_data['i(sdss)'].f / np.mean(Q.sp_sdss.y[np.abs(Q.sp_sdss.x - 7481 / 1e4) < 300 / 1e4])
+        weight, model_flux = Q.photo_data['SDSSr'].weight_function(xgrid=Q.sp_sdss.x, flux=Q.sp_sdss.y,debug=True)
+        Q.sp_sdss.y*=Q.photo_data['SDSSr'].f /model_flux
+        Q.sp_sdss.err*=Q.photo_data['SDSSr'].f / model_flux
+        #Q.sp_sdss.y *= Q.photo_data['i(sdss)'].f / np.mean(Q.sp_sdss.y[np.abs(Q.sp_sdss.x - 7481 / 1e4) < 300 / 1e4])
+        #Q.sp_sdss.err *= Q.photo_data['i(sdss)'].f / np.mean(Q.sp_sdss.y[np.abs(Q.sp_sdss.x - 7481 / 1e4) < 300 / 1e4])
 
 
 # create the quasar continuum
@@ -205,7 +208,7 @@ if 1:
         # plot ned fluxes
         for el in Q.photo_data.values():
             if 'SDSS' in el.name:
-                plt.plot(el.l, el.f / data_norm, 's', markerfacecolor='yellow',markeredgecolor='black')
+                plt.errorbar(x=el.l, y=el.f / data_norm,xerr=[[el.l-el.lmin],[el.lmax-el.l]],fmt= 's', markerfacecolor='yellow',markeredgecolor='black')
             elif '2MASS' in el.name:
                 plt.plot(el.l, el.f / data_norm, 's', markerfacecolor='green', markeredgecolor='black')
             elif 'WISE' in el.name:
@@ -287,9 +290,10 @@ if 1:
             chiq_phot = 0
             for f in Q.photo_data.values():
                 weight = 0
-                if f.name in ['SDSSu','SDSSg','SDSSr','SDSSi','SDSSz']:
+                if f.name in ['SDSSu'] and 1:
                     phot_y = np.array(f.f / data_norm)
                     phot_err = np.array(f.err / data_norm)
+                    #add error on continuum
                     #model_flux = calc_band_flux(f=f, redenned_model=fit_model_interp)
                     sdss_resolution = 2000
                     delta_x, nbin = 50/1e4, int((f.lmax-f.lmin+20/1e4)/(f.lmax+f.lmin)*2*3*sdss_resolution)
@@ -305,10 +309,13 @@ if 1:
                     phot_x = np.linspace(f.lmin - delta_x, f.lmax + delta_x, nbin)
                     weight, model_flux = f.weight_function(xgrid=phot_x, flux=fit_model_interp(phot_x / (1 + Q.z_abs)))
                 if weight > 0:
-                    chi_tmp = np.power((phot_y - model_flux) / phot_err, 2)
-                    chiq_phot += 10*weight * np.power((phot_y - model_flux) / phot_err, 2)
+                    if debug:
+                        chi_tmp = np.power((phot_y - model_flux) / phot_err, 2)
+                        print(f.name,chi_tmp,phot_y,model_flux,phot_err,chi_tmp)
+                    chiq_phot += weight * np.power((phot_y - model_flux) / phot_err, 2)
             # add  photometric chi2 to spectral data chi2
-            #print(chiq_phot,chiq)
+            if debug:
+                print('chi(spec):',chiq,'chi(phot):',chiq_phot)
             chiq += chiq_phot
 
         # plot model and data
@@ -320,7 +327,6 @@ if 1:
             fig, ax = plt.subplots(2, 1, sharex=True)
 
             ax[0].plot(s_composite.x * (1 + Q.z_qso) / (1 + Q.z_abs), ext_model, label='ext_model',color='red')
-            #ax[0].plot(s_composite.x * (1 + z_qso) / (1 + z_abs), np.exp(-ext_model), label='ext_model')
             ax[0].plot(data_x, -1.086 * np.log(data_y/ fit_composite(data_x)), label='Data',color='black', zorder=-100)
             ax[0].plot(s_composite.x * (1 + Q.z_qso) / (1 + Q.z_abs),
                        extinction_quasar_reduced(l=s_composite.x * (1 + Q.z_qso) / (1 + Q.z_abs), c1=c1,
@@ -332,7 +338,6 @@ if 1:
                        np.exp(-extinction_quasar_reduced(l=s_composite.x * (1 + Q.z_qso) / (1 + Q.z_abs), c1=c1,
                             c2=c2, c3=0, x0=x0, gamma=gamma) / 1.086), label='Cont+Ext',color='red', ls='--')
 
-            #ax[1].plot(data_x, data_y, label='Data', color='black', lw=4, zorder=-100)
             ax[1].plot(Q.sp_sdss.x/(1+Q.z_abs), Q.sp_sdss.y/data_norm, label='Data', color='black', lw=4, zorder=-100)
 
             ax[1].errorbar(x=data_x, y=data_y, yerr=data_err, fmt='none', color='black', zorder=-100)
@@ -449,9 +454,9 @@ if 1:
         return ln
 
     # define prior function for paramters
-    def log_prior(theta, MW_prior=True):
+    def log_prior(theta, MW_prior=False):
         (f0,c1, c2, c3, x0, gamma) = theta
-        if (0.8<f0 and -4 < c1 <10  and -1 < c2 <10 and 0 < c3 <10 and 4.4 < x0 < 4.8 and 0.5< gamma<2.7):
+        if (0.8<f0 and -4 < c1 <10  and -1 < c2 <10 and 0 < c3 <10 and 4.4 < x0 < 4.8 and 0.6< gamma<1.5):
             if MW_prior:
                 return -10*( ((gamma-1)/0.1)**2 +  ((x0-4.6)/0.1)**2)
             else:
@@ -473,7 +478,7 @@ if 1:
     # define fitting parameters
     if 1:
         ndim = 6  #number of parameters
-        nwalkers = 300
+        nwalkers =300
         nsteps = 800
         par_names = ['f0', 'c1', 'c2', 'c3', 'x0', 'gamma']
 

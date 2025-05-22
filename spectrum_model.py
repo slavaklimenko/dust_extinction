@@ -62,12 +62,19 @@ class photometry():
         if transmission_filename != None:
             d = np.loadtxt(transmission_filename)
             self.transmission = interp1d(d[:,0],d[:,1]/np.nanmax(d[:,1]),fill_value=0, bounds_error=False)
-    def weight_function(self,xgrid = [1,2],flux=None):
+            self.l
+    def weight_function(self,xgrid = [1,2],flux=None,debug=False):
         x = np.array(xgrid)*1e4
         y = self.transmission(x)
         w = np.trapz(y,x)
         if flux is not None:
             fit_value = np.trapz(y*flux,x)/w
+            if debug:
+                plt.subplots()
+                plt.plot(x,flux)
+                plt.plot(x,y)
+                plt.axhline(fit_value)
+                plt.show()
             return w,fit_value
         else:
             return w

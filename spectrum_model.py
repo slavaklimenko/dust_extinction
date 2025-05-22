@@ -32,7 +32,7 @@ import csv
 
 
 class photometry():
-    def __init__(self, l=None, nu=None, f=None,name='',err=None,lmin=None,lmax=None,mag=None):
+    def __init__(self, l=None, nu=None, f=None,name='',err=None,lmin=None,lmax=None,mag=None,transmission_filename=None):
         if l is not None:
             self.l=l
         if mag is not None:
@@ -53,12 +53,27 @@ class photometry():
             self.f_nu = self.f /((self.l * 1e4) ** 2 / 3e18 * 1e-17 / 1e-23)
 
         self.name = name
+        self.read_transmission_profile(transmission_filename)
 
     def calc_lambda(self):
         if hasattr(self,'nu'):
             self.l = 3e10/self.nu*1e4 #in micron
+    def read_transmission_profile(self,transmission_filename=None):
+        if transmission_filename != None:
+            d = np.loadtxt(transmission_filename)
+            self.transmission = interp1d(d[:,0],d[:,1]/np.nanmax(d[:,1]),fill_value=0, bounds_error=False)
+    def weight_function(self,xgrid = [1,2],flux=None):
+        x = np.array(xgrid)*1e4
+        y = self.transmission(x)
+        w = np.trapz(y,x)
+        if flux is not None:
+            fit_value = np.trapz(y*flux,x)/w
+            return w,fit_value
+        else:
+            return w
 
 #define classes and functions
+
 class spectrum():
     def __init__(self, x=None, y=None, err=None,name=None):
         if any([v is not None for v in [x, y, err]]):

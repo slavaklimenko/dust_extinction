@@ -1,6 +1,7 @@
 import numpy as np
 from dust_extinction_model.spectrum_model import *
 
+path_to_transmission_files = './data/filters/'
 
 def mag_flux_conv(AB, ref=48.6, offset=0):
     return 10 ** (-(AB + ref + offset) / 2.5) / 1e-23
@@ -20,19 +21,45 @@ class sys():
     def add_sdss_photometry(self,band='u',mag=19,mag_err=0.02):
         if band == 'u':
             self.photo_data['SDSSu'] = photometry(l=3562 / 1e4, lmin=3055 / 1e4, lmax=4030 / 1e4, f=mag_flux_conv(mag, offset=-0.04),
-                                       err=mag_flux_err(mag-0.04,merr=mag_err), name='SDSSu')
+                                       err=mag_flux_err(mag-0.04,merr=mag_err), name='SDSSu',
+                                       transmission_filename=path_to_transmission_files+'SLOAN_SDSS.u.dat')
         elif band == 'g':
             self.photo_data['SDSSg'] = photometry(l=4686 / 1e4, lmin=3797 / 1e4, lmax=5553 / 1e4, f=mag_flux_conv(mag),
-                       err=mag_flux_err(mag,merr=mag_err), name='SDSSg')
+                       err=mag_flux_err(mag,merr=mag_err), name='SDSSg',
+                                       transmission_filename=path_to_transmission_files+'SLOAN_SDSS.g.dat')
         elif band == 'r':
             self.photo_data['r(sdss)'] = photometry(l=6166 / 1e4, lmin=5418 / 1e4, lmax=6994 / 1e4, f=mag_flux_conv(mag),
-                                                      err=mag_flux_err(mag,merr=mag_err), name='SDSSr')
+                                                      err=mag_flux_err(mag,merr=mag_err), name='SDSSr',
+                                       transmission_filename=path_to_transmission_files+'SLOAN_SDSS.r.dat')
         elif band == 'i':
             self.photo_data['i(sdss)'] = photometry(l=7481 / 1e4, lmin=6692 / 1e4, lmax=8400 / 1e4, f=mag_flux_conv(mag),
-                                               err=mag_flux_err(mag,merr=mag_err), name='SDSSi')
+                                               err=mag_flux_err(mag,merr=mag_err), name='SDSSi',
+                                       transmission_filename=path_to_transmission_files+'SLOAN_SDSS.i.dat')
         elif band == 'z':
             self.photo_data['z(sdss)'] = photometry(l=8931 / 1e4, lmin=7964 / 1e4, lmax=10873 / 1e4, f=mag_flux_conv(mag),
-                                               err=mag_flux_err(mag,merr=mag_err), name='SDSSz')
+                                               err=mag_flux_err(mag,merr=mag_err), name='SDSSz',
+                                       transmission_filename=path_to_transmission_files+'SLOAN_SDSS.z.dat')
+
+    def add_2mass_photometry(self,band= 'J', f=None,err=None):
+        if band == 'J':
+            self.photo_data['2MASSJ'] = photometry(nu=2.4e14, lmin=10806.47 / 1e4, lmax=14067.97 / 1e4,
+                                        f=f, err=err, name='2MASSJ',
+                                       transmission_filename=path_to_transmission_files+'2MASS_2MASS.J.dat')
+        elif band == 'H':
+            QSO_list['J0901'].photo_data['H(2MASS)'] = photometry(nu=1.82e14, lmin=14787.38 / 1e4, lmax=18231.02 / 1e4,
+                                                                  f=f, err=err, name='2MASSH',
+                                       transmission_filename=path_to_transmission_files+'2MASS_2MASS.H.dat')
+        elif band == 'K':
+            QSO_list['J0901'].photo_data['Ks(2MASS)'] = photometry(nu=1.38e14, lmin=19543.69 / 1e4, lmax=23552.40 / 1e4,
+                                                                   f=f, err=err, name='2MASSK',
+                                       transmission_filename=path_to_transmission_files+'2MASS_2MASS.Ks.dat')
+    def add_wise_photometry(self, band='W1', f=None, err=None):
+        if band == 'W1':
+            self.photo_data['W1'] = photometry(nu=8.94e13, f=f, err=err, name='WISE1', lmin=27540.97 / 1e4,
+                        lmax=38723.88 / 1e4, transmission_filename=path_to_transmission_files+'WISE_WISE.W1.dat')
+        elif band == 'W2':
+            self.photo_data['W2'] = photometry(nu=6.51e13, f=f, err=err, name='WISE2', lmin=39633.26 / 1e4,
+                        lmax=53413.60 / 1e4, transmission_filename=path_to_transmission_files+'WISE_WISE.W2.dat')
 
 
 
@@ -55,10 +82,18 @@ QSO_list['J0900'].add_sdss_photometry('i',19.281,0.024)
 QSO_list['J0900'].add_sdss_photometry('z',18.86,0.044)
 #
 QSO_list['J0901'].add_sdss_photometry('u',18.92,0.020)
-QSO_list['J0901'].add_sdss_photometry('g',18.41,0.020)
+#QSO_list['J0901'].add_sdss_photometry('g',18.41,0.020)
 QSO_list['J0901'].add_sdss_photometry('r',17.76,0.020)
 QSO_list['J0901'].add_sdss_photometry('i',17.48,0.02)
-QSO_list['J0901'].add_sdss_photometry('z',17.178,0.02)
+#QSO_list['J0901'].add_sdss_photometry('z',17.178,0.02)
+#QSO_list['J0901'].add_2mass_photometry(band= 'J', f=5.31e-4,err=4e-5)
+#QSO_list['J0901'].add_2mass_photometry(band= 'H', f=5.81e-4,err=4.7e-5)
+#QSO_list['J0901'].add_2mass_photometry(band= 'K', f=7.61e-4,err=6.4e-5)
+#QSO_list['J0901'].add_wise_photometry(band= 'W1', f=7.52e-4,err=1.87e-5)
+#QSO_list['J0901'].add_wise_photometry(band= 'W2', f=1.09e-3,err=2.7e-5)
+
+
+
 #
 QSO_list['J1007'].add_sdss_photometry('u',21.175,0.030)
 QSO_list['J1007'].add_sdss_photometry('g',20.101,0.020)
@@ -97,13 +132,19 @@ QSO_list['J1138'].path_sdss_spec = folder+'spectrum/spec-J1138-0880-52367-0435.f
 
 
 # set masked regions for sdss spectra
+QSO_list['J0900'].mask_bad_pixels_sdss_spec = [4020,4050,4155,4360,4800,4845,4870,4890,4965,5330,5740,5550,5582,5888,
+                                               7278,7380,8830,8920,8960]
+QSO_list['J1017'].mask_bad_pixels_sdss_spec = [4965,5029,5048,5478,5508,5578,5930,6043,8886]
+
+QSO_list['J0901'].mask_bad_pixels_sdss_spec = [3592,3605,3620,3634,3662,3689,3708,3834,3875,3917,4080,4471,4541,
+                                               4491,4541,4595,4733,4906,4237,5653,5760,6475,6865,6897,7000,7600,8222]
+QSO_list['J1007'].mask_bad_pixels_sdss_spec = [3594,3617,3716,3748,3787,4002,4088,4181,4415,4473,4489,4880,5275,5374,
+                                               5671,5685,7413,7478,9948]
 QSO_list['J0745'].mask_bad_pixels_sdss_spec = [3818, 4366,4430,4532.4601,4740,4780,5577,5893,6704,6793,6817,
                                                7401,7439,7999,8019,8160,8186,9314,9378,9441,9480,9504,9522,9791]
 QSO_list['J0850'].mask_bad_pixels_sdss_spec = [3888,3915,4206,4314,4714,4797,5259,5995,6017,6048,
                                                6303,6506,6522,6637,8828,8910,8960]
 QSO_list['J1138'].mask_bad_pixels_sdss_spec = [3847,3864,5171,5191, 5578,5666,5998,6091,6107,6303,7855,8764]
-
-
 
 
 

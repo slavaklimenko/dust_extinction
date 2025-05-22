@@ -45,66 +45,9 @@ if 1:
 
 #set target data
 if 1:
-    q_name = 'J1138'
+    q_name = 'J0901'
     Q = QSO_list[q_name]
 
-
-    if 0:
-        def mag(AB,ref=48.6,offset=0):
-            return 10 ** (-(AB + ref+offset) / 2.5) / 1e-23
-        ned_fluxes = {}
-        if q_name == 'J0900':
-            ned_fluxes['u(sdss)'] = photometry(l=3562 / 1e4, lmin=3055 / 1e4, lmax=4030 / 1e4, f=mag(20.79, offset=-0.04),
-                                               err=-mag(20.79 - 0.04 + 0.074) + mag(20.79 - 0.04), name='SDSSu')  # pm0.09
-            ned_fluxes['g(sdss)'] = photometry(l=4686 / 1e4, lmin=3797 / 1e4, lmax=5553 / 1e4, f=mag(20.544),
-                                               err=-mag(20.54 + 0.027) + mag(20.54), name='SDSSg')  # pm0.02
-            ned_fluxes['r(sdss)'] = photometry(l=6166 / 1e4, lmin=5418 / 1e4, lmax=6994 / 1e4, f=mag(19.69),
-                                               err=-mag(19.69 + 0.020) + mag(19.69), name='SDSSr')  # pm0.01
-            ned_fluxes['i(sdss)'] = photometry(l=7481 / 1e4, lmin=6692 / 1e4, lmax=8400 / 1e4, f=mag(19.281),
-                                               err=-mag(19.281 + 0.024) + mag(19.281), name='SDSSi')  # pm0.01
-            ned_fluxes['z(sdss)'] = photometry(l=8931 / 1e4, lmin=7964 / 1e4, lmax=10873 / 1e4, f=mag(18.96),
-                                               err=-mag(19.00 + 0.044) + mag(19.00), name='SDSSz')  # pm0.02
-        elif q_name == 'J0901':
-            ned_fluxes['u(sdss)'] = photometry(l=3562 / 1e4, lmin=3055 / 1e4, lmax=4030 / 1e4, f=mag(18.92 - 0.04),
-                                               err=-mag(18.932 + 0.020) + mag(18.932), name='SDSSu')  # pm0.09
-            ned_fluxes['g(sdss)'] = photometry(l=4686 / 1e4, lmin=3797 / 1e4, lmax=5553 / 1e4, f=mag(18.41),
-                                               err=-mag(18.423 + 0.020) + mag(18.423), name='SDSSg')  # pm0.02
-            ned_fluxes['r(sdss)'] = photometry(l=6166 / 1e4, lmin=5418 / 1e4, lmax=6994 / 1e4, f=mag(17.759),
-                                               err=-mag(17.759 + 0.020) + mag(17.759), name='SDSSr')  # pm0.01
-            ned_fluxes['i(sdss)'] = photometry(l=7481 / 1e4, lmin=6692 / 1e4, lmax=8400 / 1e4, f=mag(17.48),
-                                               err=-mag(17.518 + 0.02) + mag(17.518), name='SDSSi')  # pm0.01
-            ned_fluxes['z(sdss)'] = photometry(l=8931 / 1e4, lmin=7964 / 1e4, lmax=10873 / 1e4, f=mag(17.178),
-                                               err=-mag(17.178 + 0.02) + mag(17.178), name='SDSSz')  # pm0.02
-        elif q_name == 'J1007':
-            ned_fluxes['NUV(GALEX)'] = photometry(nu=1.29e15, f=6.77e-7, err=3.5e-7)  # 3.4e-7
-            ned_fluxes['u(sdss)'] = photometry(l=3562 / 1e4, lmin=3055 / 1e4, lmax=4030 / 1e4,
-                                               f=mag(21.175, offset=-0.04), err=-mag(21.175 + 0.030) + mag(21.175),
-                                               name='SDSSu')  # pm0.09
-            ned_fluxes['g(sdss)'] = photometry(l=4686 / 1e4, lmin=3797 / 1e4, lmax=5553 / 1e4, f=mag(20.101),
-                                               err=-mag(20.101 + 0.02) + mag(20.101), name='SDSSg')  # pm0.02
-            ned_fluxes['r(sdss)'] = photometry(l=6166 / 1e4, lmin=5418 / 1e4, lmax=6994 / 1e4, f=mag(18.766),
-                                               err=-mag(18.766 + 0.01) + mag(18.766), name='SDSSr')  # pm0.01
-            ned_fluxes['i(sdss)'] = photometry(l=7481 / 1e4, lmin=6692 / 1e4, lmax=8400 / 1e4, f=mag(18.304),
-                                               err=-mag(18.304 + 0.01) + mag(18.304), name='SDSSi')  # pm0.01
-            ned_fluxes['z(sdss)'] = photometry(l=8931 / 1e4, lmin=7964 / 1e4, lmax=10873 / 1e4, f=mag(17.886),
-                                               err=-mag(17.886 + 0.02) + mag(17.886), name='SDSSz')  # pm0.02
-            ned_fluxes['J(2MASS)'] = photometry(nu=2.4e14, lmin=10806.47 / 1e4, lmax=14067.97 / 1e4, f=3.74e-4, err=4.8e-5,
-                                                name='2MASSJ')
-            ned_fluxes['H(2MASS)'] = photometry(nu=1.82e14, lmin=14787.38 / 1e4, lmax=18231.02 / 1e4, f=5.2e-4, err=7.3e-5,
-                                                name='2MASSH')
-            ned_fluxes['Ks(2MASS)'] = photometry(nu=1.38e14, lmin=19543.69 / 1e4, lmax=23552.40 / 1e4, f=7.93e-4, err=7e-5,
-                                                 name='2MASSK')
-        elif q_name == 'J0745':
-            ned_fluxes['u(sdss)'] = photometry(l=3562 / 1e4, lmin=3055 / 1e4, lmax=4030 / 1e4, f=mag(20.79, offset=-0.04),
-                                               err=-mag(20.79 - 0.04 + 0.074) + mag(20.79 - 0.04), name='SDSSu')  # pm0.09
-            ned_fluxes['g(sdss)'] = photometry(l=4686 / 1e4, lmin=3797 / 1e4, lmax=5553 / 1e4, f=mag(20.544),
-                                               err=-mag(20.54 + 0.027) + mag(20.54), name='SDSSg')  # pm0.02
-            ned_fluxes['r(sdss)'] = photometry(l=6166 / 1e4, lmin=5418 / 1e4, lmax=6994 / 1e4, f=mag(19.69),
-                                               err=-mag(19.69 + 0.020) + mag(19.69), name='SDSSr')  # pm0.01
-            ned_fluxes['i(sdss)'] = photometry(l=7481 / 1e4, lmin=6692 / 1e4, lmax=8400 / 1e4, f=mag(19.281),
-                                               err=-mag(19.281 + 0.024) + mag(19.281), name='SDSSi')  # pm0.01
-            ned_fluxes['z(sdss)'] = photometry(l=8931 / 1e4, lmin=7964 / 1e4, lmax=10873 / 1e4, f=mag(18.96),
-                                               err=-mag(19.00 + 0.044) + mag(19.00), name='SDSSz')  # pm0.02
 
     # set normalization point for continuum
     w_norm = 0.7481
@@ -195,7 +138,13 @@ if 1:
         fnorm = 1
         if f_units == 'F_lam':
             fnorm = (xx * 1e4) ** 2 / 3e18 * 1e-17 / 1e-23  # in 1e-17 erg/s/cm2/A
-        return spectrum(xx, np.array(s.y) / fnorm)
+        if debug:
+            plt.subplots()
+            plt.plot(s.x, s.y, label='cont')
+            plt.plot(s.x, s.err, label='err')
+            plt.legend()
+            plt.show()
+        return spectrum(xx, np.array(s.y) / fnorm, err=np.array(s.err) / fnorm)
 
     # create the composite
     s_composite = calc_composite_cont()
@@ -226,98 +175,8 @@ if 1:
     Q.sp_sdss.mask_fit[Q.sp_sdss.x > 1] = False
 
     # excluded absorption lines
-    if q_name == 'J0900':
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 8960 / 1e4) < 2 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 8920 / 1e4) < 2 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 8830 / 1e4) < 10 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 7380 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 7278 / 1e4) < 3 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5888 / 1e4) < 2 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5852 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5582 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5550 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5740 / 1e4) < 10 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5330 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4965 / 1e4) < 4 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4890 / 1e4) < 4 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4870 / 1e4) < 4 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4845 / 1e4) < 4 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4800 / 1e4) < 10 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4360 / 1e4) < 10 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4155 / 1e4) < 10 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4050 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4020 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[Q.sp_sdss.y < 1] = False
-    elif q_name == 'J1017':
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 8886 / 1e4) < 4 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 6043 / 1e4) < 10 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5930 / 1e4) < 15 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5578 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5508 / 1e4) < 4 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5478 / 1e4) < 4 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5048 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5029 / 1e4) < 4 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4965 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[Q.sp_sdss.y < 1] = False
-    elif q_name == 'J0901':
-        # remove absorptions
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 8222 / 1e4) < 40 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 7600 / 1e4) < 60 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 7000 / 1e4) < 30 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 6897 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 6865 / 1e4) < 6 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 6475 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5760 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5653 / 1e4) < 30 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5237 / 1e4) < 30 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4906 / 1e4) < 30 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4733 / 1e4) < 20 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4595 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4541 / 1e4) < 20 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4491 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4541 / 1e4) < 20 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4471 / 1e4) < 20 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4080 / 1e4) < 20 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3917 / 1e4) < 20 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3875 / 1e4) < 10 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3834 / 1e4) < 10 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3708 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3689 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3662 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3634 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3620 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3605 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3592 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[Q.sp_sdss.x < 3596 / 1e4] = False
-    elif q_name == 'J1007':
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 9948 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 7478 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 7413 / 1e4) < 10 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5685 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5671 / 1e4) < 6 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5374 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 5275 / 1e4) < 15 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4880 / 1e4) < 40 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4489 / 1e4) < 7 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4473 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4415 / 1e4) < 7 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4181 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4088 / 1e4) < 8 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 4002 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3787 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3748 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3716 / 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3617/ 1e4) < 5 / 1e4] = False
-        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - 3594/ 1e4) < 5 / 1e4] = False
-    elif q_name == 'J0745':
-        for l in Q.mask_bad_pixels_sdss_spec:
-            Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - l / 1e4) < 9 / 1e4] = False
-    elif q_name == 'J0850':
-        for l in Q.mask_bad_pixels_sdss_spec:
-            Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - l / 1e4) < 9 / 1e4] = False
-    elif q_name == 'J1138':
-        for l in Q.mask_bad_pixels_sdss_spec:
-            Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - l / 1e4) < 9 / 1e4] = False
+    for l in Q.mask_bad_pixels_sdss_spec:
+        Q.sp_sdss.mask_fit[np.abs(Q.sp_sdss.x - l / 1e4) < 9 / 1e4] = False
     #mask Ly-a forest region
     Q.sp_sdss.mask_fit[Q.sp_sdss.x<1216/1e4*(1+Q.z_qso)] = False
 
@@ -346,9 +205,9 @@ if 1:
         # plot ned fluxes
         for el in Q.photo_data.values():
             if 'SDSS' in el.name:
-                plt.plot(el.l, el.f / data_norm, 's', color='blue')
+                plt.plot(el.l, el.f / data_norm, 's', markerfacecolor='yellow',markeredgecolor='black')
             elif '2MASS' in el.name:
-                plt.plot(el.l, el.f / data_norm, 's', markerfacecolor='orange', markeredgecolor='black')
+                plt.plot(el.l, el.f / data_norm, 's', markerfacecolor='green', markeredgecolor='black')
             elif 'WISE' in el.name:
                 plt.plot(el.l, el.f / data_norm, 's', color='red')
             else:
@@ -383,16 +242,20 @@ if 1:
         return f
 
     # a function for comparison data with the redenned model
-    def fit_qso_reduced(pars=parameters_reduced, debug=False, photometry=False, return_data = False,show_archival=True):
+    def fit_qso_reduced(pars=parameters_reduced, debug=False, photometry=True, return_data = False,show_archival=True):
         (f0, c1, c2, c3, x0, gamma) = pars
         # create the composite spectrum in quasar restframe
         s_composite = calc_composite_cont()
+
+
         # create a mask for composite array covering spectral region near w_norm wavelength
         mask_norm = np.abs(s_composite.x * (1 + Q.z_qso) - w_norm) < w_norm_disp
 
 
         # normalize composite at flux at the w_norm wavelength
-        s_composite.y /= np.nanmean(s_composite.y[mask_norm])
+        normalization_coeff = np.array(np.nanmean(s_composite.y[mask_norm]))
+        s_composite.y /= normalization_coeff
+        s_composite.err /= normalization_coeff
 
         # create the extinction_model
         ext_model = extinction_quasar_reduced(l=s_composite.x * (1 + Q.z_qso) / (1 + Q.z_abs), c1=c1,
@@ -400,8 +263,11 @@ if 1:
 
         # create a model for scaled redenned composite
         fit_model = f0*np.array(s_composite.y)*np.exp(-ext_model/ 1.086)
+        fit_err = f0*np.array(s_composite.err)*np.exp(-ext_model/ 1.086)
         # interpolation the model in absorption restframe
         fit_model_interp = interp1d(s_composite.x * (1 + Q.z_qso) / (1 + Q.z_abs), fit_model,
+                                    fill_value='extrapolate')
+        fit_err_interp = interp1d(s_composite.x * (1 + Q.z_qso) / (1 + Q.z_abs), fit_err,
                                     fill_value='extrapolate')
 
 
@@ -410,28 +276,39 @@ if 1:
         weight = np.ones_like(data_x)
         weight[np.abs(data_x-2175)<400] = 1
 
+        #add errors on composite to data_err
+        y_err = np.sqrt(data_err**2 + fit_err_interp(data_x)**2)
         # calculate chi2 fro spectral data
-        chiq = np.sum(weight*np.power((data_y - fit_model_interp(data_x)) / (data_err), 2))
+        chiq = np.sum(weight*np.power((data_y - fit_model_interp(data_x)) / (y_err), 2))
+        chiq = np.array(chiq)
 
         # calculate additional chi2 for photometric data
         if photometry:
             chiq_phot = 0
             for f in Q.photo_data.values():
                 weight = 0
-                if '2MASS' in f.name:
+                if f.name in ['SDSSu','SDSSg','SDSSr','SDSSi','SDSSz']:
                     phot_y = np.array(f.f / data_norm)
                     phot_err = np.array(f.err / data_norm)
-                    model_flux = calc_band_flux(f=f, redenned_model=fit_model_interp)
-                    weight = 200
-                elif f.name in ['u(sdss)','g(sdss)','r(sdss)','i(sdss)','z(sdss)']:
+                    #model_flux = calc_band_flux(f=f, redenned_model=fit_model_interp)
+                    sdss_resolution = 2000
+                    delta_x, nbin = 50/1e4, int((f.lmax-f.lmin+20/1e4)/(f.lmax+f.lmin)*2*3*sdss_resolution)
+                    phot_x = np.linspace(f.lmin-delta_x,f.lmax+delta_x, nbin)
+                    weight, model_flux = f.weight_function(xgrid=phot_x,flux = fit_model_interp(phot_x/(1+Q.z_abs)))
+                elif '2MASS' in f.name and 0:
                     phot_y = np.array(f.f / data_norm)
                     phot_err = np.array(f.err / data_norm)
-                    model_flux = calc_band_flux(f=f, redenned_model=fit_model_interp)
-                    weight = 100
-                # calculate chi2 for bands with weight>0
+                    #model_flux = calc_band_flux(f=f, redenned_model=fit_model_interp)
+                    sdss_resolution = 2000
+                    delta_x, nbin = 50 / 1e4, int(
+                        (f.lmax - f.lmin + 20 / 1e4) / (f.lmax + f.lmin) * 2 * 3 * sdss_resolution)
+                    phot_x = np.linspace(f.lmin - delta_x, f.lmax + delta_x, nbin)
+                    weight, model_flux = f.weight_function(xgrid=phot_x, flux=fit_model_interp(phot_x / (1 + Q.z_abs)))
                 if weight > 0:
-                    chiq_phot += weight * np.power((phot_y - model_flux) / phot_err, 2)
+                    chi_tmp = np.power((phot_y - model_flux) / phot_err, 2)
+                    chiq_phot += 10*weight * np.power((phot_y - model_flux) / phot_err, 2)
             # add  photometric chi2 to spectral data chi2
+            #print(chiq_phot,chiq)
             chiq += chiq_phot
 
         # plot model and data
@@ -459,12 +336,31 @@ if 1:
             ax[1].plot(Q.sp_sdss.x/(1+Q.z_abs), Q.sp_sdss.y/data_norm, label='Data', color='black', lw=4, zorder=-100)
 
             ax[1].errorbar(x=data_x, y=data_y, yerr=data_err, fmt='none', color='black', zorder=-100)
-            if photometry:
-                for f in Q.photo_data.values():
-                    phot_y = np.array(f.f / data_norm)
-                    phot_err = np.array(f.err / data_norm)
-                    ax[1].errorbar(x=f.l / (1 + Q.z_abs), y=phot_y, yerr=phot_err, fmt='s')
-                    ax[1].errorbar(x=f.l / (1 + Q.z_abs), y=f.f / data_norm, yerr=phot_err, fmt='v')
+            plot_photometry = True
+            if plot_photometry:
+                for el in Q.photo_data.values():
+                    if 'SDSS' in el.name:
+                        ax[1].errorbar(x=el.l/(1+Q.z_abs), y=el.f / data_norm, yerr=el.err / data_norm, fmt='s', markerfacecolor='yellow', markeredgecolor='black',ecolor='black')
+                        ax[0].plot(el.l / (1 + Q.z_abs),  -1.086 * np.log(el.f / data_norm/ fit_composite(el.l/(1+Q.z_abs))), 's', markerfacecolor='yellow',
+                                   markeredgecolor='black')
+                    elif '2MASS' in el.name:
+                        ax[1].plot(el.l/(1+Q.z_abs), el.f / data_norm, 's', markerfacecolor='green', markeredgecolor='black')
+                        ax[0].plot(el.l / (1 + Q.z_abs),
+                                   -1.086 * np.log(el.f / data_norm / fit_composite(el.l / (1 + Q.z_abs))), 's',
+                                   markerfacecolor='green',
+                                   markeredgecolor='black')
+                    elif 'WISE' in el.name:
+                        ax[1].plot(el.l/(1+Q.z_abs), el.f / data_norm, 's', color='red')
+                        ax[0].plot(el.l / (1 + Q.z_abs),
+                                   -1.086 * np.log(el.f / data_norm / fit_composite(el.l / (1 + Q.z_abs))), 's',
+                                   markerfacecolor='red',
+                                   markeredgecolor='black')
+                    else:
+                        ax[1].plot(el.l/(1+Q.z_abs), el.f / data_norm, 's', color='magenta')
+                        ax[0].plot(el.l / (1 + Q.z_abs),
+                                   -1.086 * np.log(el.f / data_norm / fit_composite(el.l / (1 + Q.z_abs))), 's',
+                                   markerfacecolor='magenta',
+                                   markeredgecolor='black')
 
 
             ax[1].set_title('chi2=' + str(chiq))
@@ -555,7 +451,7 @@ if 1:
     # define prior function for paramters
     def log_prior(theta, MW_prior=True):
         (f0,c1, c2, c3, x0, gamma) = theta
-        if (0<f0 and -4 < c1 <10  and -1 < c2 <10 and 0 < c3 <10 and 4.4 < x0 < 4.8 and 0.5< gamma<2.7):
+        if (0.8<f0 and -4 < c1 <10  and -1 < c2 <10 and 0 < c3 <10 and 4.4 < x0 < 4.8 and 0.5< gamma<2.7):
             if MW_prior:
                 return -10*( ((gamma-1)/0.1)**2 +  ((x0-4.6)/0.1)**2)
             else:
@@ -574,7 +470,7 @@ if 1:
         return lp + log_likelihood(theta, x, y)
 
 
-    # defin fitting parameters
+    # define fitting parameters
     if 1:
         ndim = 6  #number of parameters
         nwalkers = 300
@@ -583,7 +479,7 @@ if 1:
 
     # set initial values and run mcmc and save calcualtion to mcmc.pkl
     if 1:
-        f0 = 1
+        f0 = 1.3
         c1 = 0.5
         c2 = 0.2
         c3 = 0.3
@@ -667,6 +563,7 @@ if 1:
                         col.plot(np.arange(nsteps)[mask], chi2max[mask], color='blue')
 
                         col.set_yscale('log')
+                    col.axvline(nsteps * 0.8,ls='--',color='red')
                     i += 1
 
             else:
@@ -719,8 +616,8 @@ if 1:
             c.plotter.plot(filename="example.png", figsize="column")
             res = c.analysis.get_summary(parameters=par_names)
             for p in par_names:
-                if 'None' in res[p][2]:
-                    print(p)
+                if res[p][2] == None:
+                    print(res[p])
                 else:
                     print(p, res[p][1],res[p][2]-res[p][1],res[p][1]-res[p][0])
 
